@@ -8,6 +8,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
+import { firebase } from "../../src/firebase/config";
 import Input from "../../components/Forms/Input";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
@@ -22,10 +28,73 @@ const LogInScreen = (props) => {
   const handleSubmit = async (loginDetails) => {
     try {
       setLoaderLoading(true);
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(loginDetails.email, loginDetails.password);
+
+      // navigate to home screen
+
+      setLoaderLoading(false);
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/wrong-password") {
+        // Show error on the screen, for now I just console logged.
+        console.log("Invalid email or password");
+      }
+
+      if (error.code === "auth/user-not-found") {
+        // Show error on the screen, for now I just console logged.
+        console.log(
+          "There is no user record corresponding to this email or password"
+        );
+      }
+
+      // Show error on the screen, for now I just console logged.
+      console.log("Something went wrong!");
+
       setErrorDisplay(true);
       setLoaderLoading(false);
+    }
+  };
+
+  const googleSignInHandler = async () => {
+    GoogleSignin.configure();
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      // Navigate to home screen
+    } catch (error) {
+      // Show error on the screen, for now I just console logged.
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("You cancelled the login flow");
+      }
+      // Show error on the screen, for now I just console logged.
+      else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Operation is in progress already");
+      }
+      // Show error on the screen, for now I just console logged.
+      else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play services not available or outdated");
+      }
+      // Show error on the screen, for now I just console logged.
+      else {
+        console.log("Something went wrong!");
+      }
+    }
+  };
+
+  const anonymousHandler = async () => {
+    try {
+      await firebaseAuth.signInAnonymously();
+
+      // Navigate to home screen
+    } catch (error) {
+      if (error.code === "auth/operation-not-allowed") {
+        // Show error on the screen, for now I just console logged.
+        console.log("Enable anonymous in your firebase console.");
+      }
+      // Show error on the screen, for now I just console logged.
+      console.log("Something went wrong!");
     }
   };
 
@@ -127,12 +196,18 @@ const LogInScreen = (props) => {
               flexDirection: "row",
             }}
           >
-            <View style={styles.extraLoginContainerStyle}>
+            <TouchableOpacity
+              style={styles.extraLoginContainerStyle}
+              onPress={googleSignInHandler}
+            >
               <Text style={styles.extraLoginTextStyle}>Google</Text>
-            </View>
-            <View style={styles.extraLoginContainerStyle}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.extraLoginContainerStyle}
+              onPress={anonymousHandler}
+            >
               <Text style={styles.extraLoginTextStyle}>Guest</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -144,7 +219,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "white",
-    paddingTop:30
+    paddingTop: 30,
   },
   imageContainer: {
     marginTop: 25,
