@@ -8,10 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import {
-  GoogleSignin,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+import * as Google from "expo-auth-session/providers/google";
 
 import { firebase } from "../../src/firebase/config";
 import Input from "../../components/Forms/Input";
@@ -57,36 +54,40 @@ const LogInScreen = (props) => {
   };
 
   const googleSignInHandler = async () => {
-    GoogleSignin.configure();
+    // GoogleSignin.configure();
     try {
-      await GoogleSignin.hasPlayServices();
-      // Get the users ID token
-      const { idToken } = await GoogleSignin.signIn();
+      Google.useAuthRequest({
+        clientId:
+          "319624225408-22rmk3v0i7fppu6tt6n6p9qmbjqq05o7.apps.googleusercontent.com",
+      });
+      // await GoogleSignin.hasPlayServices();
+      // // Get the users ID token
+      // const { idToken } = await GoogleSignin.signIn();
 
-      // Create a Google credential with the token
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // // Create a Google credential with the token
+      // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-      // Sign-in the user with the credential
-      await auth().signInWithCredential(googleCredential);
+      // // Sign-in the user with the credential
+      // await auth().signInWithCredential(googleCredential);
 
       // Navigate to home screen
     } catch (error) {
       // Show error on the screen, for now I just console logged.
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log("You cancelled the login flow");
-      }
-      // Show error on the screen, for now I just console logged.
-      else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log("Operation is in progress already");
-      }
-      // Show error on the screen, for now I just console logged.
-      else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log("Play services not available or outdated");
-      }
-      // Show error on the screen, for now I just console logged.
-      else {
-        console.log("Something went wrong!");
-      }
+      // if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      //   console.log("You cancelled the login flow");
+      // }
+      // // Show error on the screen, for now I just console logged.
+      // else if (error.code === statusCodes.IN_PROGRESS) {
+      //   console.log("Operation is in progress already");
+      // }
+      // // Show error on the screen, for now I just console logged.
+      // else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      //   console.log("Play services not available or outdated");
+      // }
+      // // Show error on the screen, for now I just console logged.
+      // else {
+      console.log("Something went wrong!");
+      // }
     }
   };
 
