@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import Input from "../../components/Forms/Input";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
 import FormInputError from "../../components/FormInputError";
 //formik
 import * as Yup from "yup";
 import { Formik } from "formik";
+import Input from "../../components/Forms/Input";
 const LogInScreen = (props) => {
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [loaderLoading, setLoaderLoading] = useState(false);
@@ -22,6 +22,7 @@ const LogInScreen = (props) => {
   const handleSubmit = async (loginDetails) => {
     try {
       setLoaderLoading(true);
+      props.navigation.navigate("Drawer Screen")
     } catch (error) {
       console.log(error);
       setErrorDisplay(true);

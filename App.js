@@ -3,6 +3,7 @@ import AppLoading from "expo-app-loading"; // expo install expo-app-loading
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationStackNavigation from "./DrawerNavigation/AuthenticationStackNavigation";
+// import Navigator from "./components/Navigation/Navigator";
 
 export default function App() {
   let [fontsLoaded] = useFonts({

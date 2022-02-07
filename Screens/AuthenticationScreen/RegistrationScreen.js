@@ -9,13 +9,13 @@ import {
   ScrollView,
 } from "react-native";
 
-import Input from "../../components/Forms/Input";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
 //formik
 import * as Yup from "yup";
 import { Formik } from "formik";
 import FormInputError from "../../components/FormInputError";
+import Input from "../../components/Forms/Input";
 const RegistrationScreen = (props) => {
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [loaderLoading, setLoaderLoading] = useState(false);

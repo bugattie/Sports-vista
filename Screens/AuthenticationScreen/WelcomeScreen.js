@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { View, StyleSheet, Text, Image } from "react-native";
+
 import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
 
