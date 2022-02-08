@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -6,10 +6,30 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  BackHandler
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
 const AcdemyScreen = (props) => {
+
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
+
+  const [searchValue, setSearchValue] = useState("");
+  const [search, setSearch] = useState([]);
+  const [noValueFond, setNoValueFond] = useState("");
   const Acdemy = [
     {
       Title: "Moin khan Academy",
@@ -29,6 +49,13 @@ const AcdemyScreen = (props) => {
           imges: require("../../assets/AcdemyImages/MoinKhanAcdemy/FourthImage.jpeg"),
         },
       ],
+      location: {
+        latitude: 23.259933,
+        longitude: 77.412613,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
+      },
+      cordinate: { latitude: 23.259933, longitude: 77.412613 },
     },
     {
       Title: "NBP Academy",
@@ -41,6 +68,13 @@ const AcdemyScreen = (props) => {
           imges: require("../../assets/AcdemyImages/NBP/SecondImage.jpeg"),
         },
       ],
+      location: {
+        latitude: 23.259933,
+        longitude: 77.412613,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
+      },
+      cordinate: { latitude: 23.259933, longitude: 77.412613 },
     },
     {
       Title: "vital five",
@@ -56,6 +90,13 @@ const AcdemyScreen = (props) => {
           imges: require("../../assets/AcdemyImages/VitalFive/ThirdImage.jpeg"),
         },
       ],
+      location: {
+        latitude: 23.259933,
+        longitude: 77.412613,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
+      },
+      cordinate: { latitude: 23.259933, longitude: 77.412613 },
     },
     {
       Title: "PIA cricket Academy",
@@ -68,6 +109,13 @@ const AcdemyScreen = (props) => {
           imges: require("../../assets/AcdemyImages/PIA/SecondImage.jpeg"),
         },
       ],
+      location: {
+        latitude: 23.259933,
+        longitude: 77.412613,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
+      },
+      cordinate: { latitude: 23.259933, longitude: 77.412613 },
     },
     {
       Title: "National Cricket Academy",
@@ -83,10 +131,18 @@ const AcdemyScreen = (props) => {
           imges: require("../../assets/AcdemyImages/Natation/ThirdImage.jpeg"),
         },
       ],
+      location: {
+        latitude: 23.259933,
+        longitude: 77.412613,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
+      },
+      cordinate: { latitude: 23.259933, longitude: 77.412613 },
     },
   ];
 
   const AcdemyCard = (item) => {
+    console.log("enter");
     return (
       <>
         <TouchableOpacity
@@ -103,6 +159,15 @@ const AcdemyScreen = (props) => {
       </>
     );
   };
+
+  const handlerSearch = () => {
+    const filterValue = Acdemy.filter((item) => item?.Title == searchValue);
+    setSearch(filterValue);
+    if (filterValue?.length == 0) {
+      setNoValueFond("No Acdemy Found");
+    }
+  };
+  console.log("search", search);
   return (
     <>
       <View style={styles.screen}>
@@ -110,12 +175,27 @@ const AcdemyScreen = (props) => {
           <TextInput
             placeholder="Search By Acdemy Name"
             style={styles.searchTextStyle}
+            onChangeText={(e) => {
+              setSearchValue(e);
+              if (e.length == 0) {
+                setSearch([]);
+                setNoValueFond("")
+              }
+            }}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handlerSearch}>
             <Feather name="search" size={20} color="gray" />
           </TouchableOpacity>
         </View>
-        <FlatList data={Acdemy} renderItem={AcdemyCard} />
+        {noValueFond ? (
+          <View style={{width:'100%' , justifyContent:"center" , alignItems:"center" , marginTop:20}}>
+                      <Text style={{fontFamily:"montserrat-medium"}}>{noValueFond}</Text>
+          </View>
+        ) : search?.length != 0 ? (
+          <FlatList data={search} renderItem={AcdemyCard} />
+        ) : (
+          <FlatList data={Acdemy} renderItem={AcdemyCard} />
+        )}
       </View>
     </>
   );

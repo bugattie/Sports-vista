@@ -25,6 +25,7 @@ const DrawerScreen = (props) => {
         <Drawer.Screen name="Acdemy Screen" component={AcdemyScreen} />
         <Drawer.Group
           screenOptions={{
+            //disabling drawer header
             headerShown: false,
           }}
         >

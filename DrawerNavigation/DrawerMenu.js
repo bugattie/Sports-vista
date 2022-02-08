@@ -22,7 +22,7 @@ const DrawerMenuDetail = (props) => {
         <View>
           <TouchableOpacity
             onPress={() => {
-                props.navigation.navigate("Venue Screen");
+              props.navigation.navigate("Venue Screen");
             }}
             style={styles.drawerTabContainer}
           >
@@ -32,6 +32,19 @@ const DrawerMenuDetail = (props) => {
               color="#fff"
             />
             <Text style={styles.drawerTextStyle}>Venue SCreen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("Acdemy Screen");
+            }}
+            style={styles.drawerTabContainer}
+          >
+            <MaterialCommunityIcons
+              name="desktop-mac-dashboard"
+              size={18}
+              color="#fff"
+            />
+            <Text style={styles.drawerTextStyle}>Acdemy SCreen</Text>
           </TouchableOpacity>
         </View>
       </View>

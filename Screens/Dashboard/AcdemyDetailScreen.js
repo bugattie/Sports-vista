@@ -1,17 +1,24 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Marker} from "react-native-maps";
+import { Text, View, StyleSheet, Image, BackHandler } from "react-native";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Carousel from "react-native-snap-carousel";
 import Colors from "../../constant/Colors";
+import { useFocusEffect } from "@react-navigation/native";
 const AcdemyDetailScreen = (props) => {
   const { item } = props?.route?.params?.route;
 
-  let location = {
-    latitude: 23.259933,
-    longitude: 77.412613,
-    latitudeDelta: 0.009,
-    longitudeDelta: 0.009,
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        props.navigation.navigate("Acdemy Screen");
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
   const renderItem = ({ item, index }) => {
     return (
       <View
@@ -21,7 +28,11 @@ const AcdemyDetailScreen = (props) => {
           height: 230,
         }}
       >
-        <Image resizeMode="contain" source={item?.imges} style={{ height: "100%" , width:"100%"}} />
+        <Image
+          resizeMode="contain"
+          source={item?.imges}
+          style={{ height: "100%", width: "100%" }}
+        />
       </View>
     );
   };
@@ -73,7 +84,7 @@ const AcdemyDetailScreen = (props) => {
           style={{
             fontSize: 20,
             fontFamily: "montserrat-bold",
-            paddingTop:10
+            paddingTop: 10,
           }}
         >
           Location
@@ -82,7 +93,7 @@ const AcdemyDetailScreen = (props) => {
           style={{
             width: "100%",
             height: 320,
-            marginTop:10,
+            marginTop: 10,
             borderWidth: 2,
             borderColor: Colors.primary,
           }}
@@ -91,11 +102,9 @@ const AcdemyDetailScreen = (props) => {
             style={StyleSheet.absoluteFillObject}
             provider={PROVIDER_GOOGLE}
             mapType="standard"
-            region={location}
+            region={item?.location}
           >
-            <Marker
-              coordinate={{ latitude: 23.259933, longitude: 77.412613 }}
-            />
+            <Marker coordinate={item?.cordinate} />
           </MapView>
         </View>
       </View>

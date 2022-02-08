@@ -9,33 +9,35 @@ const WelcomeScreen = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [item, setItem] = useState([
     {
-      image: require("../../assets/Images/WelcomeImage.png"),
+      image: require("../../assets/Images/sportsVista.jpeg"),
       title: `Welcome to `,
-      boldText: "Super Tax",
+      boldText: "sports Vista",
       subText:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+        "where  team meets team Sports vista is app where we promote our local teams to showcase their talents ",
     },
     {
-      image: require("../../assets/Images/WelcomeImage.png"),
-      boldText: `Snap & Post`,
+      image: require("../../assets/Images/Football.jpeg"),
+      boldText: `sports Vista`,
       subText:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+        "where  team meets team Sports vista is app where we promote our local teams to showcase their talents ",
     },
     {
-      image: require("../../assets/Images/WelcomeImage.png"),
-      boldText: `Reports`,
+      image: require("../../assets/Images/Baskitball.jpeg"),
+      boldText: `sports Vista`,
       subText:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text",
+        "where  team meets team Sports vista is app where we promote our local teams to showcase their talents ",
     },
   ]);
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.slideContainer}>
+        <View>
         <Image
           style={styles.imagesStyle}
           source={item.image}
           resizeMode="contain"
         />
+        </View>
         <Text style={styles.titleStyle}>
           {item.title}
           <Text style={styles.boldStyle}>{item.boldText}</Text>
@@ -151,6 +153,7 @@ const styles = StyleSheet.create({
   },
   imagesStyle: {
     marginBottom: 40,
+    height:200
   },
   titleStyle: {
     fontSize: 20,

@@ -9,13 +9,14 @@ import {
   ScrollView,
 } from "react-native";
 
+import { firebase } from "../../src/firebase/config";
+import Input from "../../components/Forms/Input";
 import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
 //formik
 import * as Yup from "yup";
 import { Formik } from "formik";
 import FormInputError from "../../components/FormInputError";
-import Input from "../../components/Forms/Input";
 const RegistrationScreen = (props) => {
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [loaderLoading, setLoaderLoading] = useState(false);
@@ -23,8 +24,43 @@ const RegistrationScreen = (props) => {
   const handleSubmit = async (registrationDetails) => {
     try {
       setLoaderLoading(true);
+
+      // Account creation with the email and password
+      const response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(
+          registrationDetails.email,
+          registrationDetails.password
+        );
+
+      // Getting the id of just created user
+      const uid = response.user.uid;
+      const data = {
+        ...registrationDetails,
+        id: uid,
+      };
+
+      // Storing user information on the firestore collection named Users
+      const usersRef = firebase.firestore().collection("Users");
+      await usersRef.doc(uid).set(data);
+
+      // Navigate to Home Screen
+
+      setLoaderLoading(false);
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/email-already-in-use") {
+        // Show error on the screen, for now I just console logged.
+        console.log("That email address is already in use!");
+      }
+
+      if (error.code === "auth/invalid-email") {
+        // Show error on the screen, for now I just console logged.
+        console.log("That email address is invalid!");
+      }
+
+      // Show error on the screen, for now I just console logged.
+      console.log("Something went wrong!");
+
       setErrorDisplay(true);
       setLoaderLoading(false);
     }
@@ -52,7 +88,7 @@ const RegistrationScreen = (props) => {
   return (
     <View style={styles.screen}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView behavior="padding">
+
           <View style={styles.imageContainer}>
             <Image
               source={require("../../assets/Images/SignIn.png")}
@@ -143,7 +179,7 @@ const RegistrationScreen = (props) => {
                       errors={errors.phoneNo}
                     />
                     <Input
-                      title="Address"
+                      title="Team name"
                       placeholder="**********"
                       value={values.address}
                       onChangeText={handleChange("address")}
@@ -192,7 +228,6 @@ const RegistrationScreen = (props) => {
               <Text style={styles.boldStyle}>Login.</Text>
             </Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
       </ScrollView>
     </View>
   );
