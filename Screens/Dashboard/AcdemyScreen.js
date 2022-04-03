@@ -6,14 +6,12 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
 const AcdemyScreen = (props) => {
-
-
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
@@ -26,8 +24,6 @@ const AcdemyScreen = (props) => {
       };
     }, [])
   );
-
-  const [searchValue, setSearchValue] = useState("");
   const [search, setSearch] = useState([]);
   const [noValueFond, setNoValueFond] = useState("");
   const Acdemy = [
@@ -142,7 +138,6 @@ const AcdemyScreen = (props) => {
   ];
 
   const AcdemyCard = (item) => {
-    console.log("enter");
     return (
       <>
         <TouchableOpacity
@@ -160,14 +155,27 @@ const AcdemyScreen = (props) => {
     );
   };
 
-  const handlerSearch = () => {
-    const filterValue = Acdemy.filter((item) => item?.Title == searchValue);
-    setSearch(filterValue);
-    if (filterValue?.length == 0) {
-      setNoValueFond("No Acdemy Found");
-    }
+  const handlerSearch = (e) => {
+    try {
+      const arrayOfSearch = [];
+      const filterValue = Acdemy.filter((item) => {
+        let title = item?.Title?.toLowerCase();
+        let searchWord = e?.toLowerCase();
+        if (title.includes(searchWord)) {
+          console.log("enter");
+          arrayOfSearch?.push(item);
+        }
+      });
+      console.log(arrayOfSearch);
+      if (arrayOfSearch?.length != 0) {
+        setSearch(arrayOfSearch);
+        setNoValueFond("")
+      } else {
+        setNoValueFond("No Acdemy Found");
+      }
+    } catch (error) {}
   };
-  console.log("search", search);
+  console.log("set-search" ,search)
   return (
     <>
       <View style={styles.screen}>
@@ -176,20 +184,30 @@ const AcdemyScreen = (props) => {
             placeholder="Search By Acdemy Name"
             style={styles.searchTextStyle}
             onChangeText={(e) => {
-              setSearchValue(e);
+              // setSearchValue(e);
+              handlerSearch(e);
               if (e.length == 0) {
                 setSearch([]);
-                setNoValueFond("")
+                setNoValueFond("");
               }
             }}
           />
-          <TouchableOpacity onPress={handlerSearch}>
+          <TouchableOpacity>
             <Feather name="search" size={20} color="gray" />
           </TouchableOpacity>
         </View>
         {noValueFond ? (
-          <View style={{width:'100%' , justifyContent:"center" , alignItems:"center" , marginTop:20}}>
-                      <Text style={{fontFamily:"montserrat-medium"}}>{noValueFond}</Text>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <Text style={{ fontFamily: "montserrat-medium" }}>
+              {noValueFond}
+            </Text>
           </View>
         ) : search?.length != 0 ? (
           <FlatList data={search} renderItem={AcdemyCard} />
@@ -221,7 +239,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#52b5ff",
+    backgroundColor: "#2d415a",
   },
   acdemyTextStyle: {
     fontFamily: "montserrat-bold",

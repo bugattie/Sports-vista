@@ -15,7 +15,7 @@ const DrawerScreen = (props) => {
         initialRouteName="Acdemy Screen"
         screenOptions={{
           drawerStyle: {
-            backgroundColor: "#52b5ff",
+            backgroundColor: "#2d415a",
             width: 220,
           },
         }}

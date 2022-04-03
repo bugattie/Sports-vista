@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   extraLoginContainerStyle: {
-    backgroundColor: "#89bfec",
+    backgroundColor: "#2d415a",
     width: 100,
     justifyContent: "center",
     alignItems: "center",
